@@ -1,0 +1,74 @@
+# .gitignore для OpenRouter Bot
+# Игнорируем чувствительные файлы и данные
+
+# Env файлы
+.env
+.env.local
+.env.*.local
+
+# Данные пользователей (история, бюджет, экспорты)
+data/
+docx/
+# Python кэш и байт-код
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.json
+MANIFEST
+
+# Тесты и кэш
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Логи
+*.log
+
+# OS-specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Тесты
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+test_data/  # Временные данные для E2E
+.env.test  # Тестовый .env (не коммитить)
+pytest.ini
+

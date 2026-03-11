@@ -1,0 +1,15 @@
+# FILE: docker-compose.yml
+version: '3.8'
+
+services:
+  openrouter-bot:
+    build: .
+    container_name: openrouter-bot
+    restart: unless-stopped
+    env_file:
+      - .env # Загружаем переменные из .env
+    volumes:
+      - ./data:/app/data # Монтируем папку data, чтобы история не терялась при перезапуске
+    # ports: # Для бота порты не нужны, так как он использует long polling
+    #   - "8080:8080"
+
