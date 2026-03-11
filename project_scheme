@@ -7,7 +7,16 @@
     ├── history.py
     ├── utils.py
     └── handlers/
-        ├── __init__.py   
-        ├── admin_handlers.py
-        └── user_handlers.py
+       ├── __init__.py              # (опционально, не используется напрямую)
+       │
+       ├── admin/
+       │   ├── __init__.py          # Экспорт списка admin_routers
+       │   ├── manage_users.py      # /adduser, /removeuser, /listusers, / clearusers
+       │   └── broadcast.py         # /broadcast — рассылка всем
+       │
+       └── user/
+           ├── __init__.py          # Экспорт списка user_routers
+           ├── start.py             # /start, регистрация новых пользователей
+           ├── menu.py              # /menu, /help, /reset, /stats
+           └── subscription.py      # Заглушка: /mysub (для будущих подписок)
 
