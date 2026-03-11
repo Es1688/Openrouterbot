@@ -87,7 +87,7 @@ def create_main_keyboard() -> ReplyKeyboardMarkup:
                 KeyboardButton(text=get_button_text(model_names[2], ALLOWED_MODES[2])),
                 KeyboardButton(text="Очистить контекст"),
             ],
-            [KeyboardButton(text="Help")]
+            [KeyboardButton(text="Menu")]
         ],
         resize_keyboard=True,
     )

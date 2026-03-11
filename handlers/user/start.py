@@ -46,7 +46,7 @@ async def start_handler(message: Message):
             balance = validation["balance"]
             balance_msg = f"Баланс: ${balance:.2f}" if balance is not None else "Не удалось получить баланс."
         else:
-            balance_msg = "Баланс OpenRouter скрыт (только для админов)."
+            balance_msg = "баланс баланс"
 
         user_cfg = load_user_config(user_id)
         mode = user_cfg["mode"]
@@ -55,10 +55,10 @@ async def start_handler(message: Message):
         current_model = current_model_list[0]
 
         welcome_msg = (
-            f"Привет! Я бот для чата с AI через OpenRouter.\n"
+            f"Привет! Я бот для чата с AI.\n"
             f"Текущий режим: <b>{mode}</b> (модель: {current_model})\n"
             f"Сессия: <code>{session_id[:8]}...</code>\n{balance_msg}\n\n"
-            f"Отправьте сообщение для чата или используйте кнопки. 'Help' для списка команд."
+            f"Отправьте сообщение для чата или используйте кнопки. 'Menu' для списка команд."
         )
         await message.answer(welcome_msg, reply_markup=MAIN_KEYBOARD)
         logger.info(f"Welcome sent to user {user_id}, mode={mode}")
@@ -68,7 +68,7 @@ async def start_handler(message: Message):
         await message.answer(ERROR_MESSAGE, reply_markup=MAIN_KEYBOARD)
 
 
-@router.message(F.text == "Help")
+@router.message(F.text == "Menu")
 @router.message(Command("help"))
 async def help_handler(message: Message):
     user_id = message.from_user.id
@@ -77,10 +77,10 @@ async def help_handler(message: Message):
     try:
         help_text = (
             "<b>Основные команды:</b>\n"
-            "/paid1, /paid2, /free — Быстрый выбор режима\n"
+            
             "/models — Информация о доступных моделях\n"
-            "/budget — Текущий расход и лимит токенов (баланс OpenRouter — только для админов)\n"
-            "/reset — Очистить контекст и начать новую сессию (бюджет не сбрасывается)\n\n"
+            "/budget — Текущий расход и лимит токенов\n"
+            "/reset — Очистить контекст и начать новую сессию\n\n"
             
             "<b>Управление сессиями:</b>\n"
             "/sessions — Список ваших сессий\n"
@@ -89,10 +89,7 @@ async def help_handler(message: Message):
             "/deletesession <code>id</code> — Удалить сессию\n"
             "/export — Экспорт текущей сессии в JSON\n\n"
             
-            "<b>Настройки:</b>\n"
-            "/setmodel <code>paid1|paid2|free</code> — Установить режим\n"
             
-            "/resetmodel — Сбросить режим на 'free'\n"
         )
 
         # Добавляем админские команды только для админов
