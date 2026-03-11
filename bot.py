@@ -1,23 +1,23 @@
-# FILE: bot.py (обновленный)
 """
 Основной модуль Telegram-бота для OpenRouter.
 Инициализирует и запускает бота, регистрирует обработчики из других модулей.
 """
 
 import asyncio
-from handlers import admin_router, user_router
-from api import validate_api_key  # Импортируем для валидации
-from core import bot, config, dp, logger, load_user_config, MAIN_KEYBOARD
-from utils import ensure_dirs, is_authorized
+from handlers.user import routers as user_routers
+from handlers.admin import routers as admin_routers
+from api import validate_api_key
+from core import bot, config, dp, logger
+from utils import ensure_dirs
 
 async def main():
     """Основная функция запуска бота."""
     ensure_dirs()
     logger.info("Starting OpenRouter Bot...")
 
-    # Регистрация роутеров
-    dp.include_router(admin_router)
-    dp.include_router(user_router)
+    # Регистрация всех пользовательских и админских обработчиков
+    for router in user_routers + admin_routers:
+        dp.include_router(router)
 
     if not config.admin_users:
         logger.warning("ADMIN_USERS не задан в .env. Функции администратора будут недоступны.")
