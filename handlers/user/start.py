@@ -92,11 +92,16 @@ async def help_handler(message: Message):
             "<b>Настройки:</b>\n"
             "/setmodel <code>paid1|paid2|free</code> — Установить режим\n"
             "/setlimit <code>число</code> — Установить дневной лимит в токенах\n"
-            "/resetmodel — Сбросить режим на 'free'\n\n"
-            
-            "<b>Админ-команды:</b>\n"
-            "/adduser, /removeuser, /listusers, /clearusers"
+            "/resetmodel — Сбросить режим на 'free'\n"
         )
+
+        # Добавляем админские команды только для админов
+        if is_admin(user_id):
+            help_text += (
+                "\n<b>Админ-команды:</b>\n"
+                "/adduser, /removeuser, /listusers, /clearusers, /broadcast"
+            )
+
         await message.answer(help_text, reply_markup=MAIN_KEYBOARD)
     except Exception as e:
         logger.exception(f"Error in help_handler for user {user_id}: {e}")
