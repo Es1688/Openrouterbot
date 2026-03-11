@@ -184,4 +184,27 @@ def split_long_message(text: str, max_len: int = 4096, model_signature: str = No
             parts.append(model_signature)
     
     return parts
+def user_help_message_path(user_id: int | str) -> Path:
+    return USERS_DIR / str(user_id) / "last_help_message_id.json"
 
+def save_last_help_message_id(user_id: int | str, message_id: int) -> None:
+    save_json(user_help_message_path(user_id), {"message_id": message_id})
+
+def get_last_help_message_id(user_id: int | str) -> int | None:
+    data = load_json(user_help_message_path(user_id), {})
+    return data.get("message_id")
+
+def clear_last_help_message_id(user_id: int | str) -> None:
+    path = user_help_message_path(user_id)
+    if path.exists():
+        path.unlink()
+
+async def delete_last_help_message(bot, user_id: int):
+    message_id = get_last_help_message_id(user_id)
+    if message_id:
+        try:
+            await bot.delete_message(chat_id=user_id, message_id=message_id)
+        except Exception:
+            pass
+        finally:
+            clear_last_help_message_id(user_id)

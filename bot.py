@@ -6,14 +6,19 @@
 import asyncio
 from handlers.user import routers as user_routers
 from handlers.admin import routers as admin_routers
+from middleware import HelpMessageCleanupMiddleware
 from api import validate_api_key
 from core import bot, config, dp, logger
 from utils import ensure_dirs
+
 
 async def main():
     """Основная функция запуска бота."""
     ensure_dirs()
     logger.info("Starting OpenRouter Bot...")
+
+    # Регистрация middleware для автоматического удаления сообщения /help
+    dp.message.middleware(HelpMessageCleanupMiddleware())
 
     # Регистрация всех пользовательских и админских обработчиков
     for router in user_routers + admin_routers:

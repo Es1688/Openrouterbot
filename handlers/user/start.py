@@ -9,7 +9,7 @@ from aiogram.types import Message
 from api import validate_api_key
 from core import (IsAuthorizedFilter, MAIN_KEYBOARD, config, logger,
                   load_user_config, pick_models_in_order, is_admin)
-from utils import is_authorized
+from utils import is_authorized, save_last_help_message_id
 
 router = Router()
 router.message.filter(IsAuthorizedFilter())
@@ -102,7 +102,9 @@ async def help_handler(message: Message):
                 "/adduser, /removeuser, /listusers, /clearusers, /broadcast"
             )
 
-        await message.answer(help_text, reply_markup=MAIN_KEYBOARD)
+        sent_message = await message.answer(help_text, reply_markup=MAIN_KEYBOARD)
+        # Сохраняем message_id для последующего удаления
+        save_last_help_message_id(user_id, sent_message.message_id)
     except Exception as e:
         logger.exception(f"Error in help_handler for user {user_id}: {e}")
         await message.answer(ERROR_MESSAGE, reply_markup=MAIN_KEYBOARD)
