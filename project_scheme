@@ -6,6 +6,7 @@
     ├── budget.py
     ├── history.py
     ├── utils.py
+    ├── middleware.py # удаляет сообщение help
     └── handlers/
        ├── __init__.py              # (опционально, не используется напрямую)
        │
