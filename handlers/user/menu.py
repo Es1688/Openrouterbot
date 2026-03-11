@@ -226,28 +226,6 @@ async def budget_handler(message: Message):
         await message.answer(ERROR_MESSAGE, reply_markup=MAIN_KEYBOARD)
 
 
-@router.message(Command("setlimit"))
-async def setlimit_handler(message: Message, command: CommandObject):
-    user_id = message.from_user.id
-    logger.info(f"Setlimit command from user {user_id}: {command.args}")
-
-    try:
-        if not command.args:
-            await message.answer("Укажите лимит: /setlimit <число_токенов>", reply_markup=MAIN_KEYBOARD)
-            return
-        limit = int(command.args.split()[0])
-        if limit < 0:
-            raise ValueError("Лимит не может быть отрицательным")
-        set_daily_limit(user_id, limit)
-        await message.answer(f"✅ Личный дневной лимит установлен: {limit} токенов/день", reply_markup=MAIN_KEYBOARD)
-        logger.info(f"Daily limit set to {limit} tokens for user {user_id}")
-    except (ValueError, IndexError) as e:
-        logger.warning(f"Invalid limit input from user {user_id}: {e}")
-        await message.answer("Ошибка: Лимит должен быть целым числом >= 0.", reply_markup=MAIN_KEYBOARD)
-    except Exception as e:
-        logger.exception(f"Error in setlimit_handler for user {user_id}: {e}")
-        await message.answer(ERROR_MESSAGE, reply_markup=MAIN_KEYBOARD)
-
 
 @router.message(Command("sessions"))
 async def sessions_handler(message: Message):

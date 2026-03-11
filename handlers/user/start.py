@@ -91,7 +91,7 @@ async def help_handler(message: Message):
             
             "<b>Настройки:</b>\n"
             "/setmodel <code>paid1|paid2|free</code> — Установить режим\n"
-            "/setlimit <code>число</code> — Установить дневной лимит в токенах\n"
+            
             "/resetmodel — Сбросить режим на 'free'\n"
         )
 
@@ -99,7 +99,7 @@ async def help_handler(message: Message):
         if is_admin(user_id):
             help_text += (
                 "\n<b>Админ-команды:</b>\n"
-                "/adduser, /removeuser, /listusers, /clearusers, /broadcast"
+                "/adduser, /removeuser, /listusers, /clearusers, /broadcast, /setlimit"
             )
 
         sent_message = await message.answer(help_text, reply_markup=MAIN_KEYBOARD)

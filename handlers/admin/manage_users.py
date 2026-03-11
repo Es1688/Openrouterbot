@@ -7,6 +7,7 @@ from aiogram.types import Message
 
 from core import IsAdminFilter, MAIN_KEYBOARD, config, logger
 from utils import load_authorized_users, save_authorized_users
+from budget import set_daily_limit
 
 router = Router()
 router.message.filter(IsAdminFilter())
@@ -79,4 +80,40 @@ async def clearusers_handler(message: Message):
     save_authorized_users([])  # Сохраняет пустой список, админы остаются через config
     logger.info(f"Admin {message.from_user.id} cleared whitelist")
     await message.answer("✅ Whitelist очищен (остались только администраторы).", reply_markup=MAIN_KEYBOARD)
+
+@router.message(Command("setlimit"))
+async def admin_setlimit_handler(message: Message, command: CommandObject):
+    """Устанавливает дневной лимит токенов для указанного пользователя (только админ)."""
+    if not command.args:
+        await message.answer(
+            "Использование: /setlimit <code>user_id</code> <code>лимит_токенов</code>\n"
+            "Пример: /setlimit <code>123456789</code> <code>5000</code>",
+            reply_markup=MAIN_KEYBOARD
+        )
+        return
+
+    try:
+        args = command.args.split()
+        if len(args) != 2:
+            raise ValueError("Неверное количество аргументов")
+        target_user_id = int(args[0])
+        limit = int(args[1])
+        if limit < 0:
+            raise ValueError("Лимит не может быть отрицательным")
+
+        set_daily_limit(target_user_id, limit)
+        await message.answer(
+            f"✅ Установлен дневной лимит для пользователя <code>{target_user_id}</code>: {limit} токенов/день",
+            reply_markup=MAIN_KEYBOARD
+        )
+        logger.info(f"Admin {message.from_user.id} set daily limit {limit} for user {target_user_id}")
+    except (ValueError, IndexError) as e:
+        logger.warning(f"Invalid /setlimit args from admin {message.from_user.id}: {e}")
+        await message.answer(
+            "Ошибка: Используйте /setlimit <user_id> <лимит_токенов> (оба — целые числа, лимит ≥ 0).",
+            reply_markup=MAIN_KEYBOARD
+        )
+    except Exception as e:
+        logger.exception(f"Error in admin_setlimit_handler: {e}")
+        await message.answer(ERROR_MESSAGE, reply_markup=MAIN_KEYBOARD)
 
