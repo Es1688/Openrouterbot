@@ -1,21 +1,27 @@
-# FILE: Dockerfile
 FROM python:3.12-slim
 
-# Устанавливаем рабочую директорию внутри контейнера
+# Переменные среды Python
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Рабочая директория
 WORKDIR /app
 
-# Копируем файлы зависимостей
+# Устанавливаем pip новее
+RUN pip install --upgrade pip
+
+# Копируем зависимости
 COPY requirements.txt .
 
-# Устанавливаем зависимости (включая только production-зависимости)
+# Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем весь исходный код приложения
+# Копируем код
 COPY . .
 
-# Создаем директорию для данных (на случай, если volume не подключен)
+# Создаем директорию для данных
 RUN mkdir -p /app/data
 
-# Команда для запуска бота
+# Запуск бота
 CMD ["python", "bot.py"]
 
